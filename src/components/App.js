@@ -11,10 +11,12 @@ const App=()=>{
       setInit(true);
     });
   },[]);
-  console.log(authService.currentUser);
-  return(<>
+  //console.log(authService.currentUser);
+  return(
+  <>
     {init? <AppRouter isLoggedIn={isLoggedIn}></AppRouter> :"initializing..."}
-    <footer>&copy {new Date().getUTCDate()}</footer></>
+    <footer>&copy {new Date().getUTCDate()}</footer>
+  </>
     );
 }
 
