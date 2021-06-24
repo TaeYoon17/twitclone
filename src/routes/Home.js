@@ -1,26 +1,21 @@
 import React,{useEffect, useState} from "react";
 import {dbService} from "fbase";
-const Home=()=>{
+const Home=({userObj})=>{
     const [twit,setTwit]=useState("");
     const [twits,setTwits]=useState([]);
-    const getTwits=async()=>{
-        const dbTwits=await dbService.collection("twit").get();
-        dbTwits.forEach(document=>{   
-        const twitObj={
-            ...document.data(),
-            id:document.id
-        }
-            setTwits(prev=>[twitObj,...prev]);
-        });
-    }
     useEffect(()=>{
-        getTwits();
+        dbService.collection("twit").onSnapshot(snapshot=>{
+            const tiwtArray=snapshot.docs.map(doc=>({id:doc.id,...doc.data()}));
+            console.log(tiwtArray);
+            setTwits(tiwtArray);
+        });
     },[]);
-    const onSubmit=async (e)=>{
+    const onSubmit=async e=>{
         e.preventDefault();
         await dbService.collection("twit").add({
-            twit,
-            createdAt: Date.now()
+            text: twit,
+            createdAt: Date.now(),
+            creatorId:userObj.uid
         });
         setTwit("");
     }
@@ -28,7 +23,6 @@ const Home=()=>{
         const{target:{value}}=e;
         setTwit(value);
     }
-    console.log(twits);
     return(
         <>
             <form onSubmit={onSubmit}>
@@ -36,7 +30,7 @@ const Home=()=>{
                 <input type="submit" value="Post"/>
             </form>
             <div>
-                {twits.map(twit=><div key={twit.id}><h4>{twit.twit}</h4></div>)}
+                {twits.map(twit=><div key={twit.id}><h4>{twit.text}</h4></div>)}
             </div>
         </>
     )
