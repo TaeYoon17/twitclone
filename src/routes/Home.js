@@ -1,5 +1,6 @@
 import React,{useEffect, useState} from "react";
 import {dbService} from "fbase";
+import Twit from "components/Twit";
 const Home=({userObj})=>{
     const [twit,setTwit]=useState("");
     const [twits,setTwits]=useState([]);
@@ -30,7 +31,7 @@ const Home=({userObj})=>{
                 <input type="submit" value="Post"/>
             </form>
             <div>
-                {twits.map(twit=><div key={twit.id}><h4>{twit.text}</h4></div>)}
+                {twits.map(twit=><Twit key={twit.id} twitObj={twit} isOwner={twit.creatorId===userObj.uid}/>)}
             </div>
         </>
     )
