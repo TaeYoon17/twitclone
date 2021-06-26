@@ -18,7 +18,7 @@ const Home=({userObj})=>{
         if(attatchment===null && twit==="") return;
         else{
             if(attatchment!==null){
-                const fileRef=storageService.ref().child(`${userObj.uid}/${uuidv4()}`)
+                const fileRef=storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
                 const response=await fileRef.putString(attatchment,"data_url");
                 attatchmentURL=await response.ref.getDownloadURL();
             }
@@ -68,7 +68,7 @@ const Home=({userObj})=>{
                 
             </form>
             <div>
-                {twits.map(twit=><Twit key={twit.id} twitObj={twit} isOwner={twit.creatorId===userObj.uid}/>)}
+                {twits.map(twit=><Twit key={twit.id} userObj={userObj} twitObj={twit} isOwner={twit.creatorId===userObj.uid}/>)}
             </div>
         </>
     )
