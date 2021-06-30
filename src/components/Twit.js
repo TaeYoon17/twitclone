@@ -8,7 +8,8 @@ const Twit=({twitObj, isOwner,userObj})=>{
     const onDelete=async ()=>{
         const conFirm=window.confirm("You want to Delete??");
         conFirm && await dbService.doc(`/twit/${twitObj.id}`).delete();
-        conFirm && await storageService.refFromURL(twitObj.attatchmentURL).delete();
+        conFirm && twitObj.attatchmentURL &&
+        await storageService.refFromURL(twitObj.attatchmentURL).delete();
     }
     const onUpdate=()=>setToggle(prev=>!prev);
     const onChange=e=>setTwit(e.target.value);
@@ -22,7 +23,7 @@ const Twit=({twitObj, isOwner,userObj})=>{
             const response=await fileRef.putString(newImg,"data_url");
             attatchmentURL=await response.ref.getDownloadURL();
         }else{
-            await storageService.refFromURL(twitObj.attatchmentURL).delete();
+            twitObj.attatchmentURL && await storageService.refFromURL(twitObj.attatchmentURL).delete();
         }
         await dbService.doc(`/twit/${twitObj.id}`).update({
             text:twit,
